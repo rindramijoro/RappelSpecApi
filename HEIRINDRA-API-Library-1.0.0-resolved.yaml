@@ -1,0 +1,215 @@
+openapi: 3.0.0
+info:
+  title: home-iot-api
+  description: an API designed to manage a library
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIRINDRA/API-Library/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /books:
+    get:
+      summary: shows a specified book in the librrary or a list of books that've been released between two specified dates
+      parameters:
+      - name: bookName
+        in: query
+        description: Filter by book name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: releaseDateStart
+        in: query
+        description: First date in the release date range
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      - name: releaseDateEnd
+        in: query
+        description: last date of the release date range
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      responses:
+        "200":
+          description: get a book or a list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    put:
+      summary: Update a book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        "200":
+          description: The book has been updated successfully
+    post:
+      summary: Add a new book to the library
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBook'
+        required: true
+      responses:
+        "201":
+          description: Your book has been added to the library
+    delete:
+      summary: Delete a book
+      parameters:
+      - name: id
+        in: query
+        description: Delete a book from the library by it's id
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: The book has been removed from the library
+  /authors:
+    get:
+      summary: Get a specified author by his/her name
+      parameters:
+      - name: authorName
+        in: query
+        description: Filter autor by name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Shows a list of the specified author
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+    put:
+      summary: Update an author
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      responses:
+        "200":
+          description: The author has been updated
+    post:
+      summary: Create a new author
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAuthor'
+        required: true
+      responses:
+        "201":
+          description: the author has been created
+    delete:
+      summary: Delete an author by id
+      parameters:
+      - name: id
+        in: query
+        description: id of the author to delete
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: "The author has been removed, RIP..."
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+        bookName:
+          type: string
+        author:
+          type: string
+          description: Author's name
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+          enum:
+          - Romance
+          - Comedy
+          - Sci-Fi
+          - Mystery
+          - Horror
+          - Drama
+        releaseDate:
+          type: string
+          format: date
+    CreateBook:
+      required:
+      - author
+      - bookName
+      type: object
+      properties:
+        bookName:
+          type: string
+        author:
+          type: string
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+          enum:
+          - Romance
+          - Comedy
+          - Sci-Fi
+          - Mystery
+          - Horror
+          - Drama
+        releaseDate:
+          type: string
+          format: date
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+          - M
+          - F
+    CreateAuthor:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+          - M
+          - F
