@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: home-iot-api
+  description: an API designed to manage a library
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIRINDRA/Book/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/HEIRINDRA/API-Library/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /books:
+    put:
+      summary: Update a book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrupdateBook'
+        required: true
+      responses:
+        "200":
+          description: The book has been updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    post:
+      summary: Add a new book to the library
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrupdateBook'
+        required: true
+      responses:
+        "201":
+          description: Your book has been added to the library
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+components:
+  schemas:
+    CrupdateBook:
+      required:
+      - bookName
+      - pageNumbers
+      - releaseDate
+      - topic
+      type: object
+      properties:
+        id:
+          type: string
+        bookName:
+          type: string
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+          enum:
+          - ROMANCE
+          - COMEDY
+          - SCI-FI
+          - DRAMA
+          - OTHER
+        releaseDate:
+          type: string
+          format: date
+    Book:
+      allOf:
+      - $ref: '#/components/schemas/CrupdateBook'
+      - type: object
+        properties:
+          author:
+            type: string
+            description: Author's name
+            nullable: true
