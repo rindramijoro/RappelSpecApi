@@ -1,0 +1,196 @@
+openapi: 3.0.0
+info:
+  title: home-iot-api
+  description: an API designed to manage a students
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIRINDRA/API-Student/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /group:
+    get:
+      summary: shows all existing group
+      parameters:
+      - name: groupName
+        in: query
+        description: Filter group by name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: promotion
+        in: query
+        description: Promotion
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      responses:
+        "200":
+          description: get a book or a list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/group'
+    put:
+      summary: Update a group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group'
+        required: true
+      responses:
+        "200":
+          description: The group has been updated
+    post:
+      summary: Add a new group to the list of groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroup'
+        required: true
+      responses:
+        "201":
+          description: The group has been created
+    delete:
+      summary: Delete a group
+      parameters:
+      - name: GroupName
+        in: query
+        description: Delete a group from the list of all groups
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: The group has been removed
+  /student:
+    get:
+      summary: Get a specified student by his/her reference
+      parameters:
+      - name: std
+        in: query
+        description: Filter student by std
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Shows a specified student
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/student'
+    put:
+      summary: Update a student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/student'
+        required: true
+      responses:
+        "200":
+          description: The student has been updated
+    post:
+      summary: Create a new student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        "201":
+          description: the student has been created
+    delete:
+      summary: Delete a student by std
+      parameters:
+      - name: STD
+        in: query
+        description: std of the student
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: The student has been removed
+components:
+  schemas:
+    group:
+      type: object
+      properties:
+        groupName:
+          type: string
+        yearOfCreation:
+          type: integer
+        Promotion:
+          type: string
+          enum:
+          - G
+          - H
+          - J
+          - K
+        totalOfStudents:
+          type: integer
+    CreateGroup:
+      required:
+      - Promotion
+      - groupName
+      - totalOfStudents
+      - yearOfCreation
+      type: object
+      properties:
+        groupName:
+          type: string
+          format: date
+        yearOfCreation:
+          type: integer
+        Promotion:
+          type: string
+          enum:
+          - G
+          - H
+          - J
+          - K
+        totalOfStudent:
+          type: integer
+    student:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+          - M
+          - F
+    CreateStudent:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+          - M
+          - F
